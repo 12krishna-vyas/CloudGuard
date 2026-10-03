@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudguard-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloudguard-dashboard
+  template:
+    metadata:
+      labels:
+        app: cloudguard-dashboard
+    spec:
+      containers:
+        - name: dashboard
+          image: nginx:latest
+          ports:
+            - containerPort: 80

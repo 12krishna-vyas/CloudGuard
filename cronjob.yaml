@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cloudguard-scanner
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+            - name: cloudguard
+              image: cloudguard:latest
+              imagePullPolicy: Never
+              envFrom:
+                - configMapRef:
+                    name: cloudguard-config
+              env:
+                - name: DRY_RUN
+                  value: "false"
+              volumeMounts:
+                - name: aws-credentials
+                  mountPath: /root/.aws
+                  readOnly: true
+          volumes:
+            - name: aws-credentials
+              secret:
+                secretName: aws-credentials
